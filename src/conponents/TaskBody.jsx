@@ -4,12 +4,15 @@ import { IoPencilOutline } from "react-icons/io5";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
+import Modal from "./Modal";
 
 const TaskBody = () => {
   const [todo, setTodo] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
   const [progress, setProgress] = useState([]);
   const [done, setDone] = useState([]);
   const { data, refetch } = useGetTask();
+  const [task, setTask] = useState("");
 
   useEffect(() => {
     if (data) {
@@ -34,6 +37,13 @@ const TaskBody = () => {
       refetch();
     }
   };
+  const handleUpdate = async (id) => {
+    setIsOpen(!isOpen);
+    const { data } = await axios.get(`http://localhost:4545/tasks/${id}`);
+    if (data) {
+      setTask(data);
+    }
+  };
 
   return (
     <div className="grid grid-cols-3 gap-2">
@@ -51,12 +61,16 @@ const TaskBody = () => {
               <div className="hidden group-hover:flex transform duration-200">
                 <button
                   onClick={() => handleDelete(task?._id)}
-                  className="border p-1 rounded-full cursor-pointer mr-2 absolute -top-4 right-0 hover:bg-gray-100 bg-white border-gray-400"
+                  className="border p-1 rounded-full cursor-pointer mr-2 absolute -top-4 right-0 hover:bg-fuchsia-100 bg-white border-fuchsia-400"
                 >
-                  <AiOutlineDelete />
+                  <AiOutlineDelete className="text-fuchsia-400" />
                 </button>
-                <button className="border p-1 rounded-full cursor-pointer mr-2 absolute -top-4 right-8 hover:bg-gray-100 bg-white border-gray-400">
-                  <IoPencilOutline />
+
+                <button
+                  onClick={() => handleUpdate(task?._id)}
+                  className="border p-1 rounded-full cursor-pointer mr-2 absolute -top-4 right-8 hover:bg-fuchsia-100 bg-white border-fuchsia-400"
+                >
+                  <IoPencilOutline className="text-fuchsia-400" />
                 </button>
               </div>
               <h1 className="text-xl pb-1 border-b border-gray-300 ">
@@ -66,7 +80,9 @@ const TaskBody = () => {
             </div>
           ))
         ) : (
-          <p className="col-span-3 text-center text-gray-500">No tasks available</p>
+          <p className="col-span-3 text-center text-gray-500">
+            No tasks available
+          </p>
         )}
       </div>
 
@@ -84,45 +100,16 @@ const TaskBody = () => {
               <div className="hidden group-hover:flex transform duration-200">
                 <button
                   onClick={() => handleDelete(task?._id)}
-                  className="border p-1 rounded-full cursor-pointer mr-2 absolute -top-4 right-0 hover:bg-gray-100 bg-white border-gray-400"
+                  className="border p-1 rounded-full cursor-pointer mr-2 absolute -top-4 right-0 hover:bg-fuchsia-100 bg-white border-fuchsia-400"
                 >
-                  <AiOutlineDelete />
+                  <AiOutlineDelete className="text-fuchsia-400" />
                 </button>
-                <button className="border p-1 rounded-full cursor-pointer mr-2 absolute -top-4 right-8 hover:bg-gray-100 bg-white border-gray-400">
-                  <IoPencilOutline />
-                </button>
-              </div>
-              <h1 className="text-xl pb-1 border-b border-gray-300 ">
-                {task?.title}
-              </h1>
-              <p className="break-words">{task?.description}</p>
-            </div>
- ))
-        ) : (
-          <p className="col-span-3 text-center text-gray-500">No tasks available</p>
-        )}
-      </div>
 
-      {/* Done */}
-      <div className="grid grid-cols-3 gap-1 p-1 rounded-3xl bg-gray-500/10">
-        <h1 className="col-span-3 text-center font-bold mb-2 text-2xl">
-          Done
-        </h1>
-        {done.length > 0 ? (
-          done.map((task) => (
-            <div
-              key={task?._id}
-              className="border p-2 group rounded-2xl border-gray-200 shadow-md bg-white relative"
-            >
-              <div className="hidden group-hover:flex transform duration-200">
                 <button
-                  onClick={() => handleDelete(task?._id)}
-                  className="border p-1 rounded-full cursor-pointer mr-2 absolute -top-4 right-0 hover:bg-gray-100 bg-white border-gray-400"
+                  onClick={() => handleUpdate(task?._id)}
+                  className="border p-1 rounded-full cursor-pointer mr-2 absolute -top-4 right-8 hover:bg-fuchsia-100 bg-white border-fuchsia-400"
                 >
-                  <AiOutlineDelete />
-                </button>
-                <button className="border p-1 rounded-full cursor-pointer mr-2 absolute -top-4 right-8 hover:bg-gray-100 bg-white border-gray-400">
-                  <IoPencilOutline />
+                  <IoPencilOutline className="text-fuchsia-400" />
                 </button>
               </div>
               <h1 className="text-xl pb-1 border-b border-gray-300 ">
@@ -132,9 +119,52 @@ const TaskBody = () => {
             </div>
           ))
         ) : (
-          <p className="col-span-3 text-center text-gray-500">No tasks available</p>
+          <p className="col-span-3 text-center text-gray-500">
+            No tasks available
+          </p>
         )}
       </div>
+
+      {/* Done */}
+      <div className="grid grid-cols-3 gap-1 p-1 rounded-3xl bg-gray-500/10">
+        <h1 className="col-span-3 text-center font-bold mb-2 text-2xl">Done</h1>
+        {done.length > 0 ? (
+          done.map((task) => (
+            <div
+              key={task?._id}
+              className="border p-2 group rounded-2xl border-gray-200 shadow-md bg-white relative"
+            >
+              <div className="hidden group-hover:flex transform duration-200">
+                <button
+                  onClick={() => handleDelete(task?._id)}
+                  className="border p-1 rounded-full cursor-pointer mr-2 absolute -top-4 right-0 hover:bg-fuchsia-100 bg-white border-fuchsia-400"
+                >
+                  <AiOutlineDelete className="text-fuchsia-400" />
+                </button>
+
+                <button
+                  onClick={() => handleUpdate(task?._id)}
+                  className="border p-1 rounded-full cursor-pointer mr-2 absolute -top-4 right-8 hover:bg-fuchsia-100 bg-white border-fuchsia-400"
+                >
+                  <IoPencilOutline className="text-fuchsia-400" />
+                </button>
+              </div>
+              <h1 className="text-xl pb-1 border-b border-gray-300 ">
+                {task?.title}
+              </h1>
+              <p className="break-words">{task?.description}</p>
+            </div>
+          ))
+        ) : (
+          <p className="col-span-3 text-center text-gray-500">
+            No tasks available
+          </p>
+        )}
+      </div>
+
+     {
+        task &&  <Modal task={task} isOpen={isOpen} setIsOpen={setIsOpen}></Modal>
+     }
     </div>
   );
 };
