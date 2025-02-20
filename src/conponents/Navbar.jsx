@@ -1,13 +1,23 @@
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { AuthContext } from "../Provider/AuthProvider";
+import toast from "react-hot-toast";
 
 const Navbar = () => {
-  const { user, googleLogin } = useContext(AuthContext);
+  const { user, googleLogin, logtoutUser } = useContext(AuthContext);
+  const handleLogout = () => {
+    logtoutUser()
+      .then(() => {
+        toast.success("Successfully logout!");
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
+  };
   const li = (
     <>
       <NavLink
-        to="/"
+        to={"/"}
         className={({ isActive }) =>
           `menu-item ${isActive ? "activeBtn" : "outletBtn"}`
         }
@@ -15,33 +25,11 @@ const Navbar = () => {
         Home
       </NavLink>
       {user ? (
-        <NavLink
-          to="/logout"
-          className={({ isActive }) =>
-            `menu-item ${isActive ? "activeBtn" : "outletBtn"}`
-          }
-        >
+        <NavLink onClick={() => handleLogout()} className="outletBtn">
           Logout
         </NavLink>
       ) : (
-        <>
-          <NavLink
-            to="/login"
-            className={({ isActive }) =>
-              `menu-item ${isActive ? "activeBtn" : "outletBtn"}`
-            }
-          >
-            Login
-          </NavLink>
-          <NavLink
-            to="/register"
-            className={({ isActive }) =>
-              `menu-item ${isActive ? "activeBtn" : "outletBtn"}`
-            }
-          >
-            Register
-          </NavLink>
-        </>
+        <></>
       )}
     </>
   );
@@ -49,17 +37,21 @@ const Navbar = () => {
     googleLogin()
       .then((res) => {
         if (res.user) {
-          alert("login success");
+          toast.success("Successfully login!");
         }
       })
-      .catch((error) => console.log(error.message));
+      .catch((error) => toast.success(error.message));
   };
   return (
     <div className="bg-base-100 shadow-sm">
       <div className="navbar mxw px-4">
         <div className="navbar-start">
           <div className="dropdown">
-            <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn  bg-gray-200 lg:hidden mr-4"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"
@@ -92,9 +84,20 @@ const Navbar = () => {
           <ul className="menu menu-horizontal px-1 flex gap-5">{li}</ul>
         </div>
         <div className="navbar-end">
-          <button onClick={() => handleLogin()} className="activeBtn">
-            Sign in with Google
-          </button>
+          {user ? (
+            <div className="avatar">
+              <div className="ring-primary ring-offset-base-100 w-10 rounded-full ring ring-offset-2">
+                <img src={user?.photoURl} />
+              </div>
+            </div>
+          ) : (
+            <button
+              onClick={() => handleLogin()}
+              className="outletBtn cursor-pointer"
+            >
+              Sign in with Google
+            </button>
+          )}
         </div>
       </div>
     </div>
