@@ -1,9 +1,19 @@
 import { AiOutlineDelete } from "react-icons/ai";
 import useGetTask from "../hooks/useGetTask";
 import { IoPencilOutline } from "react-icons/io5";
+import axios from "axios";
+import toast from "react-hot-toast";
+
 
 const TaskBody = () => {
-  const { data } = useGetTask();
+  const { data, refetch } = useGetTask();
+  const handleDelete = async (id) => {
+    const { data } = await axios.delete(`http://localhost:4545/tasks/${id}`);
+    if (data.deletedCount > 0) {
+      toast.success("Delete success");
+      refetch();
+    }
+  };
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 md:gap-5 gap-2">
       {data?.map((task) => (
@@ -13,7 +23,10 @@ const TaskBody = () => {
         >
           {console.log(task?.description.toString())}
           <div className="hidden group-hover:flex transform duration-200">
-            <button className="border p-1 rounded-full cursor-pointer mr-2 absolute -top-4 right-0 hover:bg-gray-100 bg-white border-gray-400">
+            <button
+              onClick={() => handleDelete(task?._id)}
+              className="border p-1 rounded-full cursor-pointer mr-2 absolute -top-4 right-0 hover:bg-gray-100 bg-white border-gray-400"
+            >
               <AiOutlineDelete />
             </button>
             <button className="border p-1 rounded-full cursor-pointer mr-2 absolute -top-4 right-8 hover:bg-gray-100 bg-white border-gray-400">
