@@ -11,5 +11,5 @@
   @apply px-5 py-2 h-full bg-fuchsia-400 font-semibold text-white rounded-full;
 }
 .outletBtn {
-  @apply px-5 py-2 h-full bg-white border rounded-full border-fuchsia-400 text-fuchsia-400 font-semibold;
+  @apply px-5 py-2 h-full bg-white border rounded-full border-fuchsia-400 cursor-pointer hover:bg-fuchsia-400/10 text-fuchsia-400 font-semibold;
 }

@@ -1,5 +1,10 @@
+import TaskForm from "../conponents/TaskForm";
+
 const Home = () => {
-  return <div>Home</div>;
+  return <div>
+    <TaskForm></TaskForm>
+    
+  </div>;
 };
 
 export default Home;
