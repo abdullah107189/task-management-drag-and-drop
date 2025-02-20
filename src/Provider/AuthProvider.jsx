@@ -12,21 +12,26 @@ export const AuthContext = createContext(null);
 // eslint-disable-next-line react/prop-types
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const provider = new GoogleAuthProvider();
 
   const googleLogin = () => {
+    setIsLoading(true);
     return signInWithPopup(auth, provider);
   };
   const logtoutUser = () => {
-    signOut(auth);
+    setIsLoading(true);
+    return signOut(auth);
   };
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-    //   console.log(currentUser);
+      //   console.log(currentUser);
       if (currentUser) {
         setUser(currentUser);
+        setIsLoading(false);
       } else {
         setUser(null);
+        setIsLoading(false);
       }
     });
     return () => {
@@ -38,6 +43,8 @@ const AuthProvider = ({ children }) => {
     setUser,
     user,
     logtoutUser,
+    isLoading,
+    setIsLoading,
   };
   return (
     <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>

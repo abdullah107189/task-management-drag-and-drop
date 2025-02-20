@@ -29,10 +29,9 @@ const Modal = ({ isOpen, setIsOpen, task }) => {
       return toast.error("Description must not exceed 200 characters.");
     }
 
-    const updateTask = { title, description };
+    const updateTask = { title, description, createdAt: new Date() };
     const { data } = await axios.put(
       `http://localhost:4545/tasks/${task._id}`,
-      updateTask,
       updateTask
     );
     if (data.modifiedCount > 0) {
@@ -43,8 +42,8 @@ const Modal = ({ isOpen, setIsOpen, task }) => {
   };
 
   return (
-    <dialog open={isOpen} className="modal bg-gray-500/50">
-      <div className="modal-box">
+    <dialog open={isOpen} className="modal bg-gray-500/50 ">
+      <div className="modal-box rounded-4xl">
         <form onSubmit={handleSubmit} className="rounded-lg my-6">
           <input
             type="text"
