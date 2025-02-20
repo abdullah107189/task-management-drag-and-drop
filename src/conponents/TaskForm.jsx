@@ -44,7 +44,7 @@ const TaskForm = () => {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
-          className="w-full p-2 border border-gray-400 font-semibold text-xl focus:outline-none rounded-2xl mb-2 bg-white"
+          className="w-full p-2 border border-gray-300 font-semibold text-xl focus:outline-none rounded-2xl mb-2 bg-white"
         />
         <div className="flex  items-center justify-center gap-5">
           <textarea
@@ -53,7 +53,7 @@ const TaskForm = () => {
             required
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full p-2 border border-gray-400 focus:outline-none rounded-2xl mb-2 min-h-18 max-h-32 bg-white"
+            className="w-full p-2 border border-gray-300 focus:outline-none rounded-2xl mb-2 min-h-18 max-h-32 bg-white"
           />
           <button type="submit" className="outletBtn w-52">
             {isFetching ? "Adding" : "Add Task"}

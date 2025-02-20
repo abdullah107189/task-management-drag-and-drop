@@ -5,7 +5,7 @@ function App() {
   return (
     <div className="bg-gray-500/10 min-h-screen">
       <Navbar></Navbar>
-      <div className="mxw px-4">
+      <div className="mxw md:px-44 px-2">
         <Outlet></Outlet>
       </div>
     </div>

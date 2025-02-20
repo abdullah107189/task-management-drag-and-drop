@@ -46,8 +46,8 @@ const TaskBody = () => {
   return (
     <div className="grid grid-cols-3 gap-2">
       {/* To Do */}
-      <div className="grid grid-cols-3 gap-1 p-1 rounded-3xl bg-gray-500/10">
-        <h1 className="col-span-3 text-center font-bold mb-2 text-2xl">
+      <div className="grid xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-1 p-1 rounded-3xl bg-gray-500/10">
+        <h1 className="xl:col-span-3 lg:col-span-2 text-center font-bold mb-2 md:text-2xl text-xl">
           To Do
         </h1>
         {todo.length > 0 ? (
@@ -85,9 +85,9 @@ const TaskBody = () => {
       </div>
 
       {/* In Progress */}
-      <div className="grid grid-cols-3 gap-1 p-1 rounded-3xl bg-gray-500/10">
-        <h1 className="col-span-3 text-center font-bold mb-2 text-2xl">
-          In Progress
+      <div className="grid xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-1 p-1 rounded-3xl bg-gray-500/10">
+        <h1 className="xl:col-span-3 lg:col-span-2 text-center font-bold mb-2 md:text-2xl text-xl">
+          Progress
         </h1>
         {progress.length > 0 ? (
           progress.map((task) => (
@@ -124,8 +124,10 @@ const TaskBody = () => {
       </div>
 
       {/* Done */}
-      <div className="grid grid-cols-3 gap-1 p-1 rounded-3xl bg-gray-500/10">
-        <h1 className="col-span-3 text-center font-bold mb-2 text-2xl">Done</h1>
+      <div className="grid xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-1 p-1 rounded-3xl bg-gray-500/10">
+        <h1 className="xl:col-span-3 lg:col-span-2 text-center font-bold mb-2 md:text-2xl text-xl">
+          Done
+        </h1>
         {done.length > 0 ? (
           done.map((task) => (
             <div
