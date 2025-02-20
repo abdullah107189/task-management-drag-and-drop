@@ -1,7 +1,9 @@
+import { useContext } from "react";
 import { NavLink } from "react-router-dom";
+import { AuthContext } from "../Provider/AuthProvider";
 
 const Navbar = () => {
-  const user = false;
+  const { user, googleLogin } = useContext(AuthContext);
   const li = (
     <>
       <NavLink
@@ -43,6 +45,15 @@ const Navbar = () => {
       )}
     </>
   );
+  const handleLogin = () => {
+    googleLogin()
+      .then((res) => {
+        if (res.user) {
+          alert("login success");
+        }
+      })
+      .catch((error) => console.log(error.message));
+  };
   return (
     <div className="bg-base-100 shadow-sm">
       <div className="navbar mxw px-4">
@@ -56,13 +67,12 @@ const Navbar = () => {
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                {" "}
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth="2"
                   d="M4 6h16M4 12h8m-8 6h16"
-                />{" "}
+                />
               </svg>
             </div>
             {/* small size  */}
@@ -82,7 +92,9 @@ const Navbar = () => {
           <ul className="menu menu-horizontal px-1 flex gap-5">{li}</ul>
         </div>
         <div className="navbar-end">
-          <a className="btn">Button</a>
+          <button onClick={() => handleLogin()} className="activeBtn">
+            Sign in with Google
+          </button>
         </div>
       </div>
     </div>
