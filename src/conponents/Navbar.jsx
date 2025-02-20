@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { AuthContext } from "../Provider/AuthProvider";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 const Navbar = () => {
   const { user, googleLogin, logtoutUser } = useContext(AuthContext);
@@ -35,12 +36,21 @@ const Navbar = () => {
   );
   const handleLogin = () => {
     googleLogin()
-      .then((res) => {
+      .then(async (res) => {
         if (res.user) {
+          const userInfo = {
+            email: res.user?.email,
+            name: res.user?.displayName,
+          };
           toast.success("Successfully login!");
+          const { data } = await axios.post(
+            "http://localhost:4545/setUser",
+            userInfo
+          );
+          console.log(data);
         }
       })
-      .catch((error) => toast.success(error.message));
+      .catch((error) => toast.error(error.message));
   };
   return (
     <div className="bg-base-100 shadow-sm">
@@ -87,7 +97,11 @@ const Navbar = () => {
           {user ? (
             <div className="avatar">
               <div className="ring-primary ring-offset-base-100 w-10 rounded-full ring ring-offset-2">
-                <img src={user?.photoURl} />
+                <img
+                  src={user?.photoURL}
+                  alt={user?.displayName}
+                  referrerPolicy="no-referrer"
+                />
               </div>
             </div>
           ) : (
