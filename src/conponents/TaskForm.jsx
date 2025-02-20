@@ -1,11 +1,15 @@
+import axios from "axios";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
+import useGetTask from "../hooks/useGetTask";
 
 const TaskForm = () => {
   const [title, setTitle] = useState("");
+
+  const { refetch, isFetching } = useGetTask();
   const [description, setDescription] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Validate title length
     if (title.length > 50) {
@@ -22,8 +26,12 @@ const TaskForm = () => {
       category: "todo",
       createdAt: new Date(),
     };
-
-    console.log(newTask);
+    const { data } = await axios.post("http://localhost:4545/tasks", newTask);
+    if (data.insertedId) {
+      refetch();
+      setTitle("");
+      setDescription("");
+    }
   };
   return (
     <div>
@@ -34,19 +42,21 @@ const TaskForm = () => {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
-          className="w-full p-2 border border-gray-400 focus:outline-none rounded mb-2"
+          className="w-full p-2 border border-gray-400 font-semibold text-2xl focus:outline-none rounded mb-2 bg-white"
         />
-        <textarea
-          placeholder="Description (optional)"
-          maxLength={200}
-          required
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          className="w-full p-2 border border-gray-400 focus:outline-none rounded mb-2 min-h-18 max-h-32"
-        />
-        <button type="submit" className="outletBtn">
-          Add Task
-        </button>
+        <div className="flex  items-center justify-center gap-5">
+          <textarea
+            placeholder="Description (optional)"
+            maxLength={200}
+            required
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="w-full p-2 border border-gray-400 focus:outline-none rounded mb-2 min-h-18 max-h-32 bg-white"
+          />
+          <button type="submit" className="outletBtn w-52">
+            {isFetching ? "Adding" : "Add Task"}
+          </button>
+        </div>
       </form>
     </div>
   );
