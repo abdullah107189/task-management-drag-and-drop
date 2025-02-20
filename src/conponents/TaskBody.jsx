@@ -12,23 +12,21 @@ const TaskBody = () => {
   const [progress, setProgress] = useState([]);
   const [done, setDone] = useState([]);
   const { data, refetch } = useGetTask();
-  const [task, setTask] = useState("");
+  const [task, setTask] = useState(null);
 
   useEffect(() => {
     if (data) {
-      filterTasks(data);
+      const todos = data.filter((task) => task.category === "todo");
+      const inProgress = data.filter((task) => task.category === "progress");
+      const completed = data.filter((task) => task.category === "done");
+
+      if (JSON.stringify(todos) !== JSON.stringify(todo)) setTodo(todos);
+      if (JSON.stringify(inProgress) !== JSON.stringify(progress))
+        setProgress(inProgress);
+      if (JSON.stringify(completed) !== JSON.stringify(done))
+        setDone(completed);
     }
-  }, [data]);
-
-  const filterTasks = (tasks) => {
-    const todos = tasks.filter((task) => task.category === "todo");
-    const inProgress = tasks.filter((task) => task.category === "progress");
-    const completed = tasks.filter((task) => task.category === "done");
-
-    setTodo(todos);
-    setProgress(inProgress);
-    setDone(completed);
-  };
+  }, [data, todo, progress, done]);
 
   const handleDelete = async (id) => {
     const { data } = await axios.delete(`http://localhost:4545/tasks/${id}`);
@@ -38,13 +36,13 @@ const TaskBody = () => {
     }
   };
   const handleUpdate = async (id) => {
-    setIsOpen(!isOpen);
     const { data } = await axios.get(`http://localhost:4545/tasks/${id}`);
+
     if (data) {
+      setIsOpen(!isOpen);
       setTask(data);
     }
   };
-
   return (
     <div className="grid grid-cols-3 gap-2">
       {/* To Do */}
@@ -162,9 +160,9 @@ const TaskBody = () => {
         )}
       </div>
 
-     {
-        task &&  <Modal task={task} isOpen={isOpen} setIsOpen={setIsOpen}></Modal>
-     }
+      {task && (
+        <Modal task={task} isOpen={isOpen} setIsOpen={setIsOpen}></Modal>
+      )}
     </div>
   );
 };
