@@ -53,14 +53,14 @@ const Navbar = () => {
         if (res.user) {
           const userInfo = {
             email: res.user?.email,
-            name: res.user?.displayName,
+            displayName: res.user?.displayName,
+            userId:res?.user?.providerData[0].uid
           };
           toast.success("Successfully login!");
           const { data } = await axios.post(
             "http://localhost:4545/setUser",
             userInfo
           );
-          console.log(data);
         }
       })
       .catch((error) => toast.error(error.message));
