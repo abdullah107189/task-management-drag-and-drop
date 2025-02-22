@@ -6,11 +6,13 @@ import {
   signOut,
 } from "firebase/auth";
 import auth from "../firebas.config";
+import useAxiosSecure from "../hooks/axiosSecure";
 
 export const AuthContext = createContext(null);
 
 // eslint-disable-next-line react/prop-types
 const AuthProvider = ({ children }) => {
+  const axiosSecure = useAxiosSecure();
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const provider = new GoogleAuthProvider();
@@ -19,18 +21,25 @@ const AuthProvider = ({ children }) => {
     setIsLoading(true);
     return signInWithPopup(auth, provider);
   };
-  const logtoutUser = () => {
+  const logoutUser = () => {
     setIsLoading(true);
     return signOut(auth);
   };
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-        // console.log(currentUser);
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      // console.log(currentUser);
       if (currentUser) {
+        const user = {
+          email: currentUser?.email,
+        };
+        const { data } = await axiosSecure.post("/jwt-sing", user);
+        localStorage.setItem("token", data.token);
+        console.log(data);
         setUser(currentUser);
         setIsLoading(false);
       } else {
         setUser(null);
+        localStorage.removeItem("token");
         setIsLoading(false);
       }
     });
@@ -42,7 +51,7 @@ const AuthProvider = ({ children }) => {
     googleLogin,
     setUser,
     user,
-    logtoutUser,
+    logoutUser,
     isLoading,
     setIsLoading,
   };

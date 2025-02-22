@@ -172,6 +172,7 @@
 // };
 
 // export default TaskBody;
+
 import { useEffect, useState } from "react";
 import useGetTask from "../hooks/useGetTask";
 import axios from "axios";
@@ -198,7 +199,7 @@ const TaskBody = () => {
       if (JSON.stringify(completed) !== JSON.stringify(done))
         setDone(completed);
     }
-  }, [data]); 
+  }, [data]);
 
   const handleDrop = async (id, newCategory) => {
     if (!id) {
@@ -213,7 +214,6 @@ const TaskBody = () => {
           category: newCategory,
         }
       );
-
 
       toast.success("Task moved successfully!");
       refetch();

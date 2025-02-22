@@ -1,20 +1,25 @@
-/* eslint-disable react/prop-types */ import { useDrop } from "react-dnd";
+import { useDrop } from "react-dnd";
 import TaskCard from "./TaskCard";
 
-const DropZone = ({
-  category,
-  tasks,
-  onDrop,
-  handleDelete,
-  handleUpdate,
-}) => {
+const DropZone = ({ category, tasks, setTasks, onDrop, handleDelete, handleUpdate }) => {
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "TASK",
-    drop: (item) => onDrop(item.id, category),
+    drop: (item, monitor) => {
+      if (!monitor.didDrop()) {
+        onDrop(item.id, category);
+      }
+    },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),
   }));
+
+  const moveTask = (dragIndex, hoverIndex) => {
+    const updatedTasks = [...tasks];
+    const [movedTask] = updatedTasks.splice(dragIndex, 1);
+    updatedTasks.splice(hoverIndex, 0, movedTask);
+    setTasks(updatedTasks);
+  };
 
   return (
     <div
@@ -27,18 +32,18 @@ const DropZone = ({
         {category.charAt(0).toUpperCase() + category.slice(1)}
       </h1>
       {tasks.length > 0 ? (
-        tasks.map((task) => (
+        tasks.map((task, index) => (
           <TaskCard
             key={task._id}
             task={task}
-            handleDelete={handleDelete} 
-            handleUpdate={handleUpdate} 
+            index={index}
+            moveTask={moveTask}
+            handleDelete={handleDelete}
+            handleUpdate={handleUpdate}
           />
         ))
       ) : (
-        <p className="col-span-3 text-center text-gray-500">
-          No tasks available
-        </p>
+        <p className="col-span-3 text-center text-gray-500">No tasks available</p>
       )}
     </div>
   );

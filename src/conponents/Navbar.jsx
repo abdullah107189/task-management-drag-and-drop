@@ -6,7 +6,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 
 const Navbar = () => {
-  const { user, googleLogin, logtoutUser } = useContext(AuthContext);
+  const { user, googleLogin, logoutUser } = useContext(AuthContext);
   const handleLogout = () => {
     Swal.fire({
       title: "Are you sure?",
@@ -18,7 +18,7 @@ const Navbar = () => {
       confirmButtonText: "Yes, Logout!",
     }).then((result) => {
       if (result.isConfirmed) {
-        logtoutUser()
+        logoutUser()
           .then(() => {
             toast.success("Successfully logout!");
           })
@@ -54,9 +54,10 @@ const Navbar = () => {
           const userInfo = {
             email: res.user?.email,
             displayName: res.user?.displayName,
-            userId:res?.user?.providerData[0].uid
+            userId: res?.user?.providerData[0].uid,
           };
           toast.success("Successfully login!");
+          // eslint-disable-next-line no-unused-vars
           const { data } = await axios.post(
             "http://localhost:4545/setUser",
             userInfo

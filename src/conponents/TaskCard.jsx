@@ -1,4 +1,4 @@
-/* eslint-disable react/prop-types */
+
 import { useDrag } from "react-dnd";
 import { AiOutlineDelete } from "react-icons/ai";
 import { IoPencilOutline } from "react-icons/io5";
