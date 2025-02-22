@@ -1,7 +1,14 @@
 import { useDrop } from "react-dnd";
 import TaskCard from "./TaskCard";
 
-const DropZone = ({ category, tasks, setTasks, onDrop, handleDelete, handleUpdate }) => {
+const DropZone = ({
+  category,
+  tasks,
+  setTasks,
+  onDrop,
+  handleDelete,
+  handleUpdate,
+}) => {
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "TASK",
     drop: (item, monitor) => {
@@ -24,11 +31,11 @@ const DropZone = ({ category, tasks, setTasks, onDrop, handleDelete, handleUpdat
   return (
     <div
       ref={drop}
-      className={`grid xl:grid-cols-3 lg:grid-cols-2 grid-cols-1 gap-1 p-1 rounded-3xl bg-gray-500/10 ${
+      className={`grid lg:grid-cols-2 grid-cols-1 gap-1 p-1 rounded-3xl bg-gray-500/10 ${
         isOver ? "bg-green-100" : ""
       }`}
     >
-      <h1 className="xl:col-span-3 lg:col-span-2 text-center font-bold mb-2 md:text-2xl text-xl">
+      <h1 className="lg:col-span-2 text-center font-bold mb-2 md:text-2xl text-xl">
         {category.charAt(0).toUpperCase() + category.slice(1)}
       </h1>
       {tasks.length > 0 ? (
@@ -43,7 +50,9 @@ const DropZone = ({ category, tasks, setTasks, onDrop, handleDelete, handleUpdat
           />
         ))
       ) : (
-        <p className="col-span-3 text-center text-gray-500">No tasks available</p>
+        <p className="col-span-3 text-center text-gray-500">
+          No tasks available
+        </p>
       )}
     </div>
   );
