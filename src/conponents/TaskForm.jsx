@@ -3,9 +3,11 @@ import { useContext, useState } from "react";
 import { toast } from "react-hot-toast";
 import useGetTask from "../hooks/useGetTask";
 import { AuthContext } from "../Provider/AuthProvider";
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const TaskForm = () => {
   const [title, setTitle] = useState("");
+  const axiosSecure = useAxiosSecure();
   const { user } = useContext(AuthContext);
   const { refetch, isFetching } = useGetTask();
   const [description, setDescription] = useState("");
@@ -28,7 +30,7 @@ const TaskForm = () => {
       category: "todo",
       createdAt: new Date(),
     };
-    const { data } = await axios.post("http://localhost:4545/tasks", newTask);
+    const { data } = await axiosSecure.post("/tasks", newTask);
     if (data.insertedId) {
       refetch();
       setTitle("");

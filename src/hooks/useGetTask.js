@@ -1,8 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { useContext } from "react";
 import { AuthContext } from "../Provider/AuthProvider";
+import useAxiosSecure from "./useAxiosSecure";
 const useGetTask = () => {
+  const axiosSecure = useAxiosSecure();
   const { user } = useContext(AuthContext);
   const {
     isPending,
@@ -13,11 +14,10 @@ const useGetTask = () => {
   } = useQuery({
     queryKey: ["tasks"],
     queryFn: async () => {
-      const { data } = await axios.get(
-        `http://localhost:4545/tasks?email=${user?.email}`
-      );
+      const { data } = await axiosSecure.get(`/tasks?email=${user?.email}`);
       return data;
     },
+    enabled: !!user?.email,
   });
   return { isPending, data, refetch, isFetching, isLoading };
 };

@@ -179,8 +179,10 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import DropZone from "./DropZone";
 import Modal from "./Modal";
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const TaskBody = () => {
+  const axiosSecure = useAxiosSecure();
   const [todo, setTodo] = useState([]);
   const [progress, setProgress] = useState([]);
   const [done, setDone] = useState([]);
@@ -208,12 +210,9 @@ const TaskBody = () => {
     }
 
     try {
-      const response = await axios.put(
-        `http://localhost:4545/updateCategory/${id}`,
-        {
-          category: newCategory,
-        }
-      );
+      const response = await axiosSecure.put(`/updateCategory/${id}`, {
+        category: newCategory,
+      });
 
       toast.success("Task moved successfully!");
       refetch();
@@ -225,7 +224,7 @@ const TaskBody = () => {
 
   const handleDelete = async (id) => {
     try {
-      const { data } = await axios.delete(`http://localhost:4545/tasks/${id}`);
+      const { data } = await axiosSecure.delete(`/tasks/${id}`);
       if (data.deletedCount > 0) {
         toast.success("Delete success");
         refetch();
@@ -237,7 +236,7 @@ const TaskBody = () => {
 
   const handleUpdate = async (id) => {
     try {
-      const { data } = await axios.get(`http://localhost:4545/tasks/${id}`);
+      const { data } = await axiosSecure.get(`/tasks/${id}`);
       if (data) {
         setIsOpen(true);
         setTask(data);

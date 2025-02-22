@@ -2,10 +2,11 @@ import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { AuthContext } from "../Provider/AuthProvider";
 import toast from "react-hot-toast";
-import axios from "axios";
 import Swal from "sweetalert2";
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const Navbar = () => {
+  const axiosSecure = useAxiosSecure();
   const { user, googleLogin, logoutUser } = useContext(AuthContext);
   const handleLogout = () => {
     Swal.fire({
@@ -57,11 +58,7 @@ const Navbar = () => {
             userId: res?.user?.providerData[0].uid,
           };
           toast.success("Successfully login!");
-          // eslint-disable-next-line no-unused-vars
-          const { data } = await axios.post(
-            "http://localhost:4545/setUser",
-            userInfo
-          );
+          const { data } = await axiosSecure.post("/setUser", userInfo);
         }
       })
       .catch((error) => toast.error(error.message));

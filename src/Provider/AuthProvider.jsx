@@ -6,13 +6,13 @@ import {
   signOut,
 } from "firebase/auth";
 import auth from "../firebas.config";
-import useAxiosSecure from "../hooks/axiosSecure";
+import useAxiosSecure from "../hooks/useAxiosSecure";
+import axios from "axios";
 
 export const AuthContext = createContext(null);
 
 // eslint-disable-next-line react/prop-types
 const AuthProvider = ({ children }) => {
-  const axiosSecure = useAxiosSecure();
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const provider = new GoogleAuthProvider();
@@ -32,9 +32,11 @@ const AuthProvider = ({ children }) => {
         const user = {
           email: currentUser?.email,
         };
-        const { data } = await axiosSecure.post("/jwt-sing", user);
+        const { data } = await axios.post(
+          "http://localhost:4545/jwt-sing",
+          user
+        );
         localStorage.setItem("token", data.token);
-        console.log(data);
         setUser(currentUser);
         setIsLoading(false);
       } else {

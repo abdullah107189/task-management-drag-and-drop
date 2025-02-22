@@ -3,12 +3,13 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import useGetTask from "../hooks/useGetTask";
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const Modal = ({ isOpen, setIsOpen, task }) => {
   const { refetch } = useGetTask();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-
+  const axiosSecure = useAxiosSecure();
   useEffect(() => {
     if (task) {
       setTitle(task.title || "");
@@ -30,10 +31,7 @@ const Modal = ({ isOpen, setIsOpen, task }) => {
     }
 
     const updateTask = { title, description, createdAt: new Date() };
-    const { data } = await axios.put(
-      `http://localhost:4545/tasks/${task._id}`,
-      updateTask
-    );
+    const { data } = await axiosSecure.put(`/tasks/${task._id}`, updateTask);
     if (data.modifiedCount > 0) {
       toast.success("Update Success");
       setIsOpen(false);
