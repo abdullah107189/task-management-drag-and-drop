@@ -1,7 +1,8 @@
 import axios from "axios";
 import toast from "react-hot-toast";
 const axiosSecure = axios.create({
-  baseURL: "http://localhost:4545",
+  // baseURL: "http://localhost:4545",
+  baseURL: "https://task-management-server-side-liard.vercel.app/",
 });
 const useAxiosSecure = () => {
   axiosSecure.interceptors.request.use(

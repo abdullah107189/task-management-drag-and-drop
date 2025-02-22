@@ -33,7 +33,7 @@ const AuthProvider = ({ children }) => {
           email: currentUser?.email,
         };
         const { data } = await axios.post(
-          "http://localhost:4545/jwt-sing",
+          "https://task-management-server-side-liard.vercel.app/jwt-sing",
           user
         );
         localStorage.setItem("token", data.token);

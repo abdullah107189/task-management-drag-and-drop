@@ -40,14 +40,15 @@ const DropZone = ({
       </h1>
       {tasks.length > 0 ? (
         tasks.map((task, index) => (
-          <TaskCard
-            key={task._id}
-            task={task}
-            index={index}
-            moveTask={moveTask}
-            handleDelete={handleDelete}
-            handleUpdate={handleUpdate}
-          />
+          <div key={task._id}>
+            <TaskCard
+              task={task}
+              index={index}
+              moveTask={moveTask}
+              handleDelete={handleDelete}
+              handleUpdate={handleUpdate}
+            />
+          </div>
         ))
       ) : (
         <p className="col-span-3 text-center text-gray-500">
